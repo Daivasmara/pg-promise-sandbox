@@ -11,7 +11,10 @@ router.get('/', pagination, async (req, res, next) => {
   const { offset, limit } = req.headers;
   try {
     const users = await db.any('SELECT id, first_name, last_name, email FROM users ORDER BY id DESC OFFSET $1 LIMIT $2', [offset, limit]);
+    const { count } = await db.one('SELECT count(*) from users;');
     res.json({
+      nTotal: Number(count),
+      totalPages: Math.ceil(count / limit),
       result: users,
     });
   } catch (err) {
