@@ -7,6 +7,7 @@ const authentication = require('./middlewares/authentication');
 
 // routes
 const login = require('./routes/login');
+const register = require('./routes/register');
 const users = require('./routes/users');
 const posts = require('./routes/posts');
 
@@ -28,6 +29,7 @@ app.get('/', (_req, res) => {
 });
 
 app.use('/login', login);
+app.use('/register', register);
 app.use('/users', authentication, users);
 app.use('/posts', authentication, posts);
 
