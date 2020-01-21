@@ -1,4 +1,5 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 const db = require('../../db');
@@ -10,6 +11,19 @@ router.get('/', async (_req, res, next) => {
   } catch (err) {
     next(err);
   }
+});
+
+router.get('/me', async (req, res, next) => {
+  const { authorization } = req.headers;
+  const token = authorization.split(' ')[1];
+  const { JWT_PRIVATE_KEY } = process.env;
+  jwt.verify(token, JWT_PRIVATE_KEY, (err, decoded) => {
+    if (!err) {
+      res.json(decoded);
+    } else {
+      next(err);
+    }
+  });
 });
 
 router.get('/:id', async (req, res, next) => {
