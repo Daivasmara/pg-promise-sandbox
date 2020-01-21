@@ -17,7 +17,7 @@ router.get('/', pagination, async (req, res, next) => {
       SELECT count(*) from posts;
     `);
     res.json({
-      nTotal: count,
+      nTotal: Number(count),
       totalPages: Math.ceil(count / limit),
       result: posts,
     });
