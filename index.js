@@ -1,13 +1,16 @@
 const express = require('express');
+
+// middlewares
 const cors = require('cors');
 const morgan = require('morgan');
+const authentication = require('./middlewares/authentication');
 
+// routes
 const login = require('./routes/login');
 const users = require('./routes/users');
 const posts = require('./routes/posts');
 
 const app = express();
-
 
 app.use(cors());
 app.use(morgan('dev'));
@@ -25,8 +28,8 @@ app.get('/', (_req, res) => {
 });
 
 app.use('/login', login);
-app.use('/users', users);
-app.use('/posts', posts);
+app.use('/users', authentication, users);
+app.use('/posts', authentication, posts);
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, _req, res, _next) => {
