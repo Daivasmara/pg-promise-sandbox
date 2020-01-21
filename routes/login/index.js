@@ -26,7 +26,7 @@ router.post('/', async (req, res, next) => {
           } else {
             next({
               status: 401,
-              message: 'Invalid Credentials',
+              message: 'Invalid Credentials.',
             });
           }
         } else {
@@ -34,7 +34,10 @@ router.post('/', async (req, res, next) => {
         }
       });
     } catch (error) {
-      next(error);
+      next({
+        status: 401,
+        message: 'Invalid Credentials.',
+      });
     }
   } else {
     next({
