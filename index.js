@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 
+const login = require('./routes/login');
 const users = require('./routes/users');
 const posts = require('./routes/posts');
 
@@ -23,7 +24,7 @@ app.get('/', (_req, res) => {
   });
 });
 
-
+app.use('/login', login);
 app.use('/users', users);
 app.use('/posts', posts);
 

@@ -5,7 +5,7 @@ const db = require('../../db');
 
 router.get('/', async (_req, res, next) => {
   try {
-    const users = await db.many('select * from users order by id desc');
+    const users = await db.many('SELECT * FROM users ORDER BY id desc');
     res.json(users);
   } catch (err) {
     next(err);
@@ -15,10 +15,10 @@ router.get('/', async (_req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const user = await db.one(`
-        select u.*, coalesce(json_agg(json_build_object('title', p.title, 'body', p.body) order by p.id desc) 
-        filter (where p.title is not null), '[]') posts 
-        from users u left join posts p on u.id = p.poster_id 
-        where u.id = $1 group by u.id
+        SELECT u.*, COALESCE(JSON_AGG(JSON_BUILD_OBJECT('title', p.title, 'body', p.body) ORDER BY p.id DESC) 
+        FILTER (WHERE p.title IS NOT NULL), '[]') posts 
+        FROM users u LEFT JOIN posts p on u.id = p.poster_id 
+        WHERE u.id = $1 GROUP BY u.id
       `, [req.params.id]);
     res.json(user);
   } catch (err) {
