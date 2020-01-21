@@ -31,8 +31,11 @@ router.post('/', async (req, res, next) => {
             if (!err) {
               db.none(`INSERT INTO users (
                 first_name, last_name, email, password
-              ) VALUES ($<user.first_name>, $<user.last_name>, $<user.email>, $<hash>);`, {
-                user, hash,
+              ) VALUES (
+                $<user.first_name>, $<user.last_name>, $<user.email>, $<hash>
+              );`, {
+                user,
+                hash,
               })
                 .then(() => res.json({
                   status: 'SUCESS',

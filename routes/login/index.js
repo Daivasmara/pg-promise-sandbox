@@ -10,13 +10,14 @@ router.post('/', async (req, res, next) => {
     const { email, password } = req.body;
     const { JWT_PRIVATE_KEY } = process.env;
     try {
-      const user = await db.one('SELECT * FROM users WHERE email = $1', [email]);
+      const user = await db.one('SELECT * FROM users WHERE email = $1;', [email]);
       bcrypt.compare(password, user.password, (err, result) => {
         if (!err) {
           if (result) {
             jwt.sign(user, JWT_PRIVATE_KEY, (error, token) => {
               if (!error) {
                 res.json({
+                  status: 'SUCCESS',
                   token,
                 });
               } else {
