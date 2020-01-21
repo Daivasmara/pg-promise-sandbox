@@ -11,7 +11,9 @@ router.get('/', pagination, async (req, res, next) => {
   const { offset, limit } = req.headers;
   try {
     const users = await db.any('SELECT id, first_name, last_name, email FROM users ORDER BY id DESC OFFSET $1 LIMIT $2', [offset, limit]);
-    res.json(users);
+    res.json({
+      result: users,
+    });
   } catch (err) {
     next(err);
   }
@@ -23,7 +25,9 @@ router.get('/me', async (req, res, next) => {
   const { JWT_PRIVATE_KEY } = process.env;
   jwt.verify(token, JWT_PRIVATE_KEY, (err, decoded) => {
     if (!err) {
-      res.json(decoded);
+      res.json({
+        result: [decoded],
+      });
     } else {
       next(err);
     }
@@ -38,7 +42,9 @@ router.get('/:id', async (req, res, next) => {
         FROM users u LEFT JOIN posts p on u.id = p.poster_id 
         WHERE u.id = $1 GROUP BY u.id
       `, [req.params.id]);
-    res.json(user);
+    res.json({
+      result: user,
+    });
   } catch (err) {
     next(err);
   }
