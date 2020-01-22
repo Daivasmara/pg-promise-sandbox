@@ -36,7 +36,7 @@ router.post('/', async (req, res, next) => {
         }
 
         res.json({
-          status: 'SUCCESS',
+          status: 'OK',
           token,
         });
       });

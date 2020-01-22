@@ -59,7 +59,7 @@ router.post('/', async (req, res, next) => {
         hash,
       })
         .then(() => res.json({
-          status: 'SUCESS',
+          status: 'OK',
           result: [user],
         }))
         .catch((error) => next(error));
