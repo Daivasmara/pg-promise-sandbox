@@ -8,7 +8,7 @@ const pagination = require('../../middlewares/pagination');
 const router = express.Router();
 
 router.get('/', pagination, async (req, res, next) => {
-  const { offset, limit } = req.headers;
+  const { offset, limit } = req.query;
   try {
     const users = await db.any('SELECT id, first_name, last_name, email FROM users ORDER BY id DESC OFFSET $1 LIMIT $2', [offset, limit]);
     const { count } = await db.one('SELECT count(*) from users;');
@@ -27,13 +27,13 @@ router.get('/me', async (req, res, next) => {
   const token = authorization.split(' ')[1];
   const { JWT_PRIVATE_KEY } = process.env;
   jwt.verify(token, JWT_PRIVATE_KEY, (err, decoded) => {
-    if (!err) {
-      res.json({
-        result: [decoded],
-      });
-    } else {
-      next(err);
+    if (err) {
+      return next(err);
     }
+
+    res.json({
+      result: [decoded],
+    });
   });
 });
 

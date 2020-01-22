@@ -7,7 +7,7 @@ const pagination = require('../../middlewares/pagination');
 const router = express.Router();
 
 router.get('/', pagination, async (req, res, next) => {
-  const { offset, limit } = req.headers;
+  const { offset, limit } = req.query;
   try {
     const posts = await db.any(`
       SELECT p.id, email poster_email, first_name poster_first_name, title, body FROM posts p 
