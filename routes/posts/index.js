@@ -10,8 +10,10 @@ router.get('/', pagination, async (req, res, next) => {
   const { offset, limit } = req.query;
   try {
     const posts = await db.any(`
-      SELECT p.id, email poster_email, first_name poster_first_name, title, body FROM posts p 
-      INNER JOIN users u on p.poster_id = u.id ORDER BY p.id DESC OFFSET $1 LIMIT $2;
+      SELECT p.id, p.title, p.body, u.email poster_email, u.first_name poster_first_name, count(*) favorites FROM posts p
+      INNER JOIN users u ON p.poster_id = u.id
+      INNER JOIN favorites f ON p.id = f.post_id
+      GROUP BY (u.id, p.id) ORDER BY p.id DESC;
     `, [offset, limit]);
     const { count } = await db.one('SELECT count(*) from posts;');
 
